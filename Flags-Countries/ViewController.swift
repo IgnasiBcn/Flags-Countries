@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var numberCuestions = 0
     
 
     override func viewDidLoad() {
@@ -46,32 +47,46 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
-        title = countries[correctAnswer].uppercased() 
+        title = countries[correctAnswer].uppercased() + " | Score: " + String(score)
+        
+        numberCuestions += 1
     }
 
     
     @IBAction func buttonTapped(_ sender: UIButton) {
-        var title: String
+        var titleCorrectOrWrong: String
         
         if sender.tag == correctAnswer {
-            title = "Correct!"
+            titleCorrectOrWrong = "Correct!"
             score += 1
         }
         else {
-            title = "Wrong"
+            titleCorrectOrWrong = "Wrong, That's the flag of \(countries[sender.tag])"
             score -= 1
         }
         
-        
-        let ac = UIAlertController(title: title,
-                                   message: "Your score is \(score).",
-                                   preferredStyle: .alert)
-        
-        ac.addAction(UIAlertAction(title: "Continiue",
-                                   style: .default,
-                                   handler: askQuestion))
-        
-        present(ac, animated: true)
+        if numberCuestions <= 6 {
+            let ac = UIAlertController(title: titleCorrectOrWrong,
+                                       message: "Your score is \(score).",
+                preferredStyle: .alert)
+            
+            ac.addAction(UIAlertAction(title: "Continiue",
+                                       style: .default,
+                                       handler: askQuestion))
+            
+            present(ac, animated: true)
+        }
+        else {
+            let ac = UIAlertController(title: titleCorrectOrWrong,
+                                       message: "Your FINAL score is \(score).",
+                preferredStyle: .alert)
+            
+            ac.addAction(UIAlertAction(title: "GAME OVER",
+                                       style: .default,
+                                       handler: nil))
+            
+            present(ac, animated: true)
+        }
     }
     
 }
